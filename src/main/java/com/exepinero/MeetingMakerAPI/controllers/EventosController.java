@@ -1,9 +1,9 @@
 package com.exepinero.MeetingMakerAPI.controllers;
 
 import com.exepinero.MeetingMakerAPI.model.Evento;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.exepinero.MeetingMakerAPI.service.EventoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -14,8 +14,12 @@ import java.util.List;
 public class EventosController {
 
 
-    @GetMapping
-    public Evento homepage(){
+    @Autowired
+    EventoService eventoService;
+
+
+    @GetMapping("test")
+    public void testData(){
 
         Evento evento1 = new Evento();
         evento1.setCreador("Exequiel");
@@ -32,7 +36,28 @@ public class EventosController {
 
         evento1.setParticipantes(invitados);
 
-        return evento1;
+        eventoService.nuevoEvento(evento1);
+    }
+
+    @GetMapping("/{id}")
+    public Evento getEvento(@PathVariable("id") Integer id){
+        return eventoService.getEvento(id);
+    }
+
+    @PostMapping
+    public void crearEvento(@RequestBody Evento evento){
+        eventoService.nuevoEvento(evento);
+    }
+
+    @GetMapping
+    public List<Evento> getEventos(){
+        List<Evento> eventos = eventoService.getEventos();
+        return eventos;
+    }
+
+    @DeleteMapping("/{id}")
+    public void deleteEvento(@PathVariable("id") Integer id){
+        eventoService.deleteEvento(id);
     }
 
 }
