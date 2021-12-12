@@ -1,13 +1,10 @@
 package com.exepinero.MeetingMakerAPI.controllers;
 
-import com.exepinero.MeetingMakerAPI.exception.ResourceNotFoundException;
 import com.exepinero.MeetingMakerAPI.model.Evento;
 import com.exepinero.MeetingMakerAPI.service.EventoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -61,12 +58,15 @@ public class EventoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Evento> getEvento(@PathVariable("id") Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<Evento> getEvento(@PathVariable("id") Integer id) {
 
-        Evento evento = eventoService.getEvento(id)
-                .orElseThrow(() -> new ResourceNotFoundException("No existe evento con id: "+id));
 
-        return new ResponseEntity<>(evento,HttpStatus.OK);
+        Optional<Evento> evento = eventoService.getEvento(id);
+
+        if(evento.isPresent()){
+            return new ResponseEntity<>(evento.get(),HttpStatus.OK);
+        }
+        else return null;
     }
 
     @PostMapping
