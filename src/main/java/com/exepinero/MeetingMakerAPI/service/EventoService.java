@@ -15,13 +15,13 @@ public class EventoService {
     EventoRepository eventoRepository;
 
 
-    public Evento getEvento(Integer id) {
+    public Optional<Evento> getEvento(Integer id) {
         Optional<Evento> evento= eventoRepository.findById(id);
-        return evento.orElse(null);
+        return evento;
     }
 
     public void nuevoEvento(Evento evento) {
-        eventoRepository.save(evento);
+        eventoRepository.saveAndFlush(evento);
     }
 
     public List<Evento> getEventos() {
@@ -32,5 +32,9 @@ public class EventoService {
     public void deleteEvento(Integer id) {
         Optional<Evento> optionalEvento = eventoRepository.findById(id);
         optionalEvento.ifPresent(evento -> eventoRepository.delete(evento));
+    }
+
+    public Evento updateEvento(Evento evento){
+        return eventoRepository.save(evento);
     }
 }

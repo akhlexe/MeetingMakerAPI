@@ -1,6 +1,9 @@
 package com.exepinero.MeetingMakerAPI.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.Future;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -9,10 +12,19 @@ import java.util.List;
 public class Evento {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    @NotNull(message = "El creador no puede ser nulo")
+    @Size(min = 1, max = 100, message = "Maximo 100 caracteres")
     private String creador;
+
+    @NotNull(message = "Todo evento necesita tener una fecha pactada.")
+    @Future
     private LocalDate fecha;
+
+    @NotNull(message = "El nombre del evento no puede ser nulo")
+    @Size(min = 1, max = 100)
     private String nombreEvento;
     private String summary;
 
